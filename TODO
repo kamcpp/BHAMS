@@ -1,0 +1,7 @@
+* In memory should become transactional and the API should support transactions.
+* HTTP channels should get secured.
+* API security is now a bypass implementation. It should be implemented.
+* Integration tests should be added.
+* More unit tests should be added.
+* Portal should equiped with authentication and authorization process and the API key should be obtained based on the authorization the user has obtained.
+* Service discovery is now hard coded. It should be dynamic.

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Blue Harvest Assignment</title>
+    <style type="text/css">
+        body {
+            font: normal 13px Arial, sans-serif;
+        }
+        table {
+            border: solid 1px #DDEEEE;
+            border-collapse: collapse;
+            border-spacing: 0;
+            font: normal 13px Arial, sans-serif;
+        }
+        table tr th {
+            background-color: #DDEFEF;
+            border: solid 1px #DDEEEE;
+            color: #336B6B;
+            padding: 10px;
+            text-align: left;
+            text-shadow: 1px 1px 1px #fff;
+        }
+        table tr td {
+            border: solid 1px #DDEEEE;
+            color: #333;
+            padding: 10px;
+            text-shadow: 1px 1px 1px #fff;
+        }
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+    <script language="JavaScript">
+        var app = angular.module('bhApp', []);
+        app.controller('bhCtrl', function($scope, $http) {
+
+          $scope.showCustomersDiv = false;
+          $scope.showCustomerInfoDiv = false;
+          $scope.initialCredit = 0;
+
+          $scope.initCustomers = function() {
+            $http({
+              method: 'GET',
+              url: '/svc/initCustomers'
+            }).then(function successCallback(response) {
+                alert("Sample data generated!");
+              }, function errorCallback(response) {
+                alert("Sample data generation failed!");
+              });
+          }
+
+          $scope.showCustomers = function() {
+            $http.get('/svc/customers').then(
+              function (response) {
+                $scope.customers = response.data;
+                $scope.showCustomersDiv = true;
+              });
+          }
+
+          $scope.openSecondaryCurrentAccount = function(customerId) {
+            $http.get('/svc/addSecondaryCurrentAccount/' + customerId + ',' + $scope.initialCredit).then(
+              function (response) {
+                alert("The secondary account has been added!");
+              });
+          }
+
+          $scope.showCustomerInfo = function(customerId) {
+            $http.get('/svc/customerInfo/' + customerId).then(
+              function (response) {
+                $scope.customerInfo = response.data;
+                $scope.showCustomerInfoDiv = true;
+              });
+          }
+
+        });
+    </script>
+</head>
+<body ng-app="bhApp" ng-controller="bhCtrl">
+    <input type="button" value="Create Sample Customers" ng-click="initCustomers()" />
+    <br />
+    <input type="button" value="Show Customers" ng-click="showCustomers()" />
+    <div style="border: 1px solid; background-color: lightgray; padding: 5px;" ng-show="showCustomerInfoDiv">
+        <div>Customer Name: {{customerInfo.name + ' ' + customerInfo.surname}}</div>
+        <div ng-repeat="accountInfo in customerInfo.accountInfos">
+            Account Id: {{accountInfo.id}} <br />
+            Balance: {{accountInfo.balance}} EUR
+            <table>
+                <tr>
+                    <th>Timestamp</th>
+                    <th>Change</th>
+                </tr>
+                <tr ng-repeat="transactionInfo in accountInfo.transactionInfos">
+                    <td>{{ transactionInfo.timestamp }}</td>
+                    <td>{{ transactionInfo.change }}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div ng-show="showCustomersDiv">
+        Initial credit for newly opened secondary credit accounts: <input style="width: 30px" type="text" ng-model="initialCredit"/>
+        <table>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Surname</th>
+            </tr>
+            <tr ng-repeat="customer in customers">
+                <td>{{ customer.id }}</td>
+                <td>{{ customer.name }}</td>
+                <td>{{ customer.surname }}</td>
+                <td>
+                    <input type="button" ng-click="openSecondaryCurrentAccount(customer.id)" value="Open Secondary Current Account" />
+                </td>
+                <td>
+                    <input type="button" ng-click="showCustomerInfo(customer.id)" value="Show Accounts and Transactions" />
+                </td>
+            </tr>
+        </table>
+    </div>
+</body>
+</html>

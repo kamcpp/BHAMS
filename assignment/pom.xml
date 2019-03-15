@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>io.blueharvest.ams</groupId> <!-- Account Management System -->
+    <artifactId>assignment</artifactId>
+    <packaging>pom</packaging>
+    <version>1.0-SNAPSHOT</version>
+
+    <modules>
+        <module>services.persistence</module>
+        <module>services.account</module>
+        <module>services.transaction</module>
+        <module>clients.portal</module>
+        <module>common.apisec</module>
+        <module>common.spring</module>
+        <module>domain.dtos</module>
+        <module>clients.proxies</module>
+    </modules>
+
+</project>
